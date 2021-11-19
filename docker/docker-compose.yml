@@ -1,0 +1,55 @@
+version: "3.9"
+services:
+
+  app:
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      context: ./app
+    container_name: app
+    ports:
+      - "8787:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/task
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - WAIT_HOSTS=db:5432
+    networks:
+      network:
+  db:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    container_name: db
+    ports:
+      - "5555:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      network:
+
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+    container_name: es01
+    environment:
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - network
+networks:
+  network:
+
+volumes:
+  postgres_data:
+  data01:
