@@ -2,10 +2,10 @@ databaseChangeLog:
   - logicalFilePath: db/changelog/db.changelog-master.yaml
   - changeSet:
       id: 1
-      author: aleks_usharovskii
+      author: anderfred
       changes:
         - createTable:
-            tableName: users
+            tableName: category
             columns:
               - column:
                   name: id
@@ -15,22 +15,143 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: username
-                  type: varchar(50)
+                  name: name
+                  type: varchar(512)
                   constraints:
-                    unique: true
+                    nullable: false
+  - changeSet:
+      id: 2
+      author: anderfred
+      changes:
+        - createTable:
+            tableName: product
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
                     nullable: false
               - column:
-                  name: password
+                  name: price
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
                   type: varchar(512)
                   constraints:
                     nullable: false
               - column:
-                  name: first_name
-                  type: varchar(50)
+                  name: sku
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
               - column:
-                  name: last_name
-                  type: varchar(50)
+                  name: category_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_category_id
+                    references: category(id)
+  - changeSet:
+      id: 3
+      author: anderfred
+      changes:
+        - createTable:
+            tableName: order
+            columns:
               - column:
-                  name: email
-                  type: varchar(50)
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    updatable: false
+              - column:
+                  name: total_amount
+                  type: double
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 4
+      author: anderfred
+      changes:
+        - createTable:
+            tableName: order_item
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_product_id
+                    references: product(id)
+              - column:
+                  name: order_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_order_id
+                    references: order(id)
+  - changeSet:
+      id: 5
+      author: anderfred
+      changes:
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  descending: true
+                  name: id
+            indexName: idx_order_item_id
+            schemaName: public
+            tableName: order_item
+            unique: true
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  descending: true
+                  name: id
+            indexName: idx_product_id
+            schemaName: public
+            tableName: product
+            unique: true
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  descending: true
+                  name: id
+            indexName: idx_order_id
+            schemaName: public
+            tableName: order
+            unique: true
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  descending: true
+                  name: id
+            indexName: idx_category_id
+            schemaName: public
+            tableName: category
+            unique: true
+
