@@ -1,5 +1,6 @@
 package com.anderfred.assignmenttask.controller;
 
+import com.anderfred.assignmenttask.controller.generic.BaseController;
 import com.anderfred.assignmenttask.model.Category;
 import com.anderfred.assignmenttask.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +23,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("category")
 @Tag(name = "Category", description = "Category entity CRUD REST API")
-public class CategoryController {
+public class CategoryController extends BaseController {
+    Logger log = LoggerFactory.getLogger(CategoryController.class);
     private final CategoryService categoryService;
 
     @Autowired
@@ -41,7 +45,10 @@ public class CategoryController {
                     })
     })
     public List<Category> getAllCategories() {
-        return categoryService.getAll();
+        logDebug(log, "getAllCategories");
+        List<Category> categories = categoryService.getAll();
+        logDebug(log, "Found : " + categories);
+        return categories;
     }
 
 
@@ -58,7 +65,9 @@ public class CategoryController {
                     })
     })
     public ResponseEntity<Category> getCategoryById(@PathVariable("id") long id) {
+        logDebug(log, String.format("getCategoryById:%d", id));
         Optional<Category> category = categoryService.findById(id);
+        category.ifPresentOrElse(v->logDebug(log, String.format("Found category :%s", v.toString())), ()->logDebug(log, "nothing found"));
         return category.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
