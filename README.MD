@@ -19,6 +19,9 @@ Docker compose file is available in folder /docker for easy deployment of enviro
 For local testing please change ElasticSearchConfig.java client configuration connection from es01:9200 to -> localhost:9200 or add to hosts redirection from es01 to localhost, also elastic search must be running on 9200 port
 
 For testing purposes application is deployed on the DigitalOcean server and available at 188.166.163.166 address
-[188.166.163.166:8787](188.166.163.166:8787) - web
-[188.166.163.166:5555]([188.166.163.166:5555]) - Postgres
-[188.166.163.166:9222]([188.166.163.166:9222]) - elastic
+
+[188.166.163.166:8787](http://188.166.163.166:8787) - web
+
+[188.166.163.166:5555](http://188.166.163.166:5555) - Postgres
+
+[188.166.163.166:9222](http://188.166.163.166:9222) - elastic
