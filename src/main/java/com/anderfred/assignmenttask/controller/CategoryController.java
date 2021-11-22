@@ -67,7 +67,7 @@ public class CategoryController extends BaseController {
     public ResponseEntity<Category> getCategoryById(@PathVariable("id") long id) {
         logDebug(log, String.format("getCategoryById:%d", id));
         Optional<Category> category = categoryService.findById(id);
-        category.ifPresentOrElse(v->logDebug(log, String.format("Found category :%s", v.toString())), ()->logDebug(log, "nothing found"));
+        category.ifPresentOrElse(v->logDebug(log, String.format("Found category :%s", v.toString())), ()->logDebug(log, "Nothing found"));
         return category.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
@@ -87,6 +87,7 @@ public class CategoryController extends BaseController {
                     description = "Internal server error")
     })
     public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+        logDebug(log, "createCategory:" + category);
         try {
             Category _category = categoryService
                     .save(new Category(category.getName(), category.getProducts()));
@@ -107,6 +108,7 @@ public class CategoryController extends BaseController {
                             schema = @Schema(implementation = Category.class))
             })
     public ResponseEntity<Category> updateCategory(@PathVariable("id") long id, @RequestBody Category category) {
+        logDebug(log, "updateCategory id:" + id + ", " + category);
         Optional<Category> categoryData = categoryService.findById(id);
         if (categoryData.isPresent()) {
             Category _category = categoryData.get();
@@ -124,6 +126,7 @@ public class CategoryController extends BaseController {
             responseCode = "204",
             description = "Category deleted")
     public ResponseEntity<HttpStatus> deleteCategory(@PathVariable("id") long id) {
+        logDebug(log, "deleteCategory id:" + id);
         try {
             categoryService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -141,10 +144,14 @@ public class CategoryController extends BaseController {
             responseCode = "500",
             description = "Internal server error")
     public ResponseEntity<HttpStatus> deleteAllCategories() {
+        logDebug(log, "deleteAllCategories");
         try {
             categoryService.deleteAll();
+            logDebug(log, "deleted");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
+            logError(log, "Error while deleting all categories, " + e.getMessage());
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
