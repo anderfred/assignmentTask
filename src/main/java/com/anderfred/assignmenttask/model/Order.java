@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "`order`")        //Wasted here 30 min of life
+@Table(name = "`order`")
 @Getter
 @Setter
 @NoArgsConstructor
