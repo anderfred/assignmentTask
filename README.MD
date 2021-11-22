@@ -13,7 +13,7 @@ Report controller with a single endpoint is available on report/ URI, which retu
 
 In the "Order" endpoint implemented search method witch is finding all orders by part of product name using the elastic search engine, btw methods save and delete are saving and deleting data of orders to the elastic engine.
 
-All endpoints and methods are annotated with open API(swagger) annotations for generating definitions which are available on [/v3/api-docs](188.166.163.166:8787/v3/api-docs) endpoint.
+All endpoints and methods are annotated with open API(swagger) annotations for generating definitions which are available on [/v3/api-docs](http://188.166.163.166:8787/v3/api-docs) endpoint.
 
 Docker compose file is available in folder /docker for easy deployment of environment.
 For local testing please change ElasticSearchConfig.java client configuration connection from es01:9200 to -> localhost:9200 or add to hosts redirection from es01 to localhost, also elastic search must be running on 9200 port
