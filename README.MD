@@ -16,7 +16,7 @@ In the "Order" endpoint implemented search method witch is finding all orders by
 All endpoints and methods are annotated with open API(swagger) annotations for generating definitions which are available on [/v3/api-docs](188.166.163.166:8787/v3/api-docs) endpoint.
 
 Docker compose file is available in folder /docker for easy deployment of environment.
-For local testing please change ElasticSearchConfig.java client configuration connection from es01:9200 to -> localhost:9200 or add to hosts redirection from es01 to localhost
+For local testing please change ElasticSearchConfig.java client configuration connection from es01:9200 to -> localhost:9200 or add to hosts redirection from es01 to localhost, also elastic search must be running on 9200 port
 
 For testing purposes application is deployed on the DigitalOcean server and available at 188.166.163.166 address
 [188.166.163.166:8787](188.166.163.166:8787) - web

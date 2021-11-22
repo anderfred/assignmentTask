@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -29,14 +27,20 @@ class ReportControllerUnitTest {
         Object[] firstOrder = new Object[2];
         Object[] secondOrder = new Object[2];
 
-        firstOrder[0] = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2021, Calendar.NOVEMBER, 11);
+
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(2021, Calendar.OCTOBER, 11);
+
+        firstOrder[0] = calendar.getTime();
         firstOrder[1] = 321d;
 
-        secondOrder[0] = Date.from(Instant.now().minus(5, ChronoUnit.DAYS));
+        secondOrder[0] = calendar1.getTime();
         secondOrder[1] = 444.5231d;
         List<Object[]> data = new ArrayList<>(List.of(firstOrder, secondOrder));
         when(orderRepository.findReportData()).thenReturn(data);
-        Assertions.assertEquals("[\"2021-11-21:321,00\",\"2021-11-16:444,52\"]", (orderService.findReportData()));
+        Assertions.assertEquals("[\"2021-11-11:321,00\",\"2021-10-11:444,52\"]", (orderService.findReportData()));
     }
 
     @Test
